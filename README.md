@@ -6,7 +6,7 @@
 
 You can one-click-deploy this project to balena using the button below:
 
-[![deploy with balena](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/klutchell/balena-homeassistant)
+[![deploy with balena](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/mathroc/balena-homeassistant)
 
 ## Manual Deployment
 
@@ -54,12 +54,6 @@ The dashboard is running on port 6052.
 
 [Frigate](https://docs.frigate.video/) is a complete and local NVR designed for Home Assistant with AI object detection. The Web UI is on port 5000.
 
-#### wyze-bridge
-
-Docker container to expose a local RTMP, RTSP, and HLS or Low-Latency HLS stream for ALL your Wyze cameras including the outdoor and doorbell cams. No third-party or special firmware required.
-
-<https://github.com/mrlt8/docker-wyze-bridge>
-
 #### influxdb & grafana
 
 You may optionally duplicate the Home Assistant sensor data to an
@@ -99,14 +93,6 @@ influxdb:
 ```
 
 The Grafana dashboard should be available at <http://homeassistant.local:3000> and the default credentials are `admin/admin`.
-
-#### duplicati
-
-Store securely encrypted backups on cloud storage services!
-
-<https://github.com/duplicati/duplicati> via <https://docs.linuxserver.io/images/docker-duplicati>
-
-The dashboard should be available at <http://homeassistant.local:8200>.
 
 #### hostname
 
