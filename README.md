@@ -7,7 +7,7 @@ that puts local control and privacy first.
 
 You can one-click-deploy this project to balena using the button below:
 
-[![deploy with balena](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/klutchell/balena-homeassistant)
+[![deploy with balena](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/mathroc/balena-homeassistant)
 
 ## Manual Deployment
 
@@ -61,14 +61,6 @@ listening on port 1883.
 
 [Zigbee2MQTT](https://www.zigbee2mqtt.io/) supports various Zigbee adapters and
 the Web UI is on port 7000.
-
-#### wyze-bridge
-
-Docker container to expose a local RTMP, RTSP, and HLS or Low-Latency HLS stream
-for ALL your Wyze cameras including the outdoor and doorbell cams. No
-third-party or special firmware required.
-
-<https://github.com/mrlt8/docker-wyze-bridge>
 
 #### hostname
 
