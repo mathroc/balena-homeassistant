@@ -7,7 +7,7 @@ services:
     volumes:
       - config:/config
     ports:
-      - "80:80"
+      - "80:8123"
     labels:
       io.balena.features.dbus: "1"
     environment:
