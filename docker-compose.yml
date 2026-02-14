@@ -18,9 +18,6 @@ services:
       - NET_ADMIN # https://www.home-assistant.io/integrations/bluetooth/#additional-details-for-container
       - NET_RAW # https://www.home-assistant.io/integrations/bluetooth/#additional-details-for-container
 
-  FiatChamp:
-    image: ghcr.io/mathroc/fiatchamp:dev
-
   # https://hub.docker.com/_/eclipse-mosquitto
   mqtt:
     build: mqtt
