@@ -9,15 +9,14 @@ services:
     ports:
       - "80:8123"
     labels:
+      # Required for Bluetooth via D-Bus
       io.balena.features.dbus: "1"
     environment:
+      # Required for Bluetooth via D-Bus
       DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
-        #privileged: true
-      #    devices:
-      #- /dev/ttyAMA0
-      #- /dev/ttyS0
-      #- /dev/serial0
-      #- /dev/serial1
+    cap_add:
+      - NET_ADMIN # https://www.home-assistant.io/integrations/bluetooth/#additional-details-for-container
+      - NET_RAW # https://www.home-assistant.io/integrations/bluetooth/#additional-details-for-container
 
   FiatChamp:
     image: ghcr.io/mathroc/fiatchamp:dev
@@ -38,7 +37,6 @@ services:
     volumes:
       - esphome:/config
     privileged: true
-    network_mode: host
 
   # https://www.zigbee2mqtt.io/guide/getting-started/#installation
   zigbee2mqtt:
@@ -53,7 +51,6 @@ services:
       - /dev/ttyS0
       - /dev/serial0
       - /dev/serial1
-  # - /dev/ttyUSB0:/dev/ttyUSB0
 
   # https://hub.docker.com/r/codercom/code-server
   code-server:
@@ -85,8 +82,6 @@ services:
   # https://github.com/home-assistant-libs/python-matter-server/blob/main/docs/docker.md
   matter-server:
     image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
-    # Required for mDNS to work correctly
-    network_mode: host
     security_opt:
       # Required for Bluetooth via D-Bus
       - apparmor:unconfined
@@ -98,8 +93,6 @@ services:
     labels:
       # Required for Bluetooth via D-Bus
       io.balena.features.dbus: '1'
-    # If you adjust command line, make sure to pass the default CMD arguments too:
-    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
 
 volumes:
   config: {}
