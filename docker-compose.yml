@@ -17,6 +17,9 @@ services:
     cap_add:
       - NET_ADMIN # https://www.home-assistant.io/integrations/bluetooth/#additional-details-for-container
       - NET_RAW # https://www.home-assistant.io/integrations/bluetooth/#additional-details-for-container
+    extra_hosts:
+      # To access the matter-server using the host network
+      - "host.docker.internal:host-gateway"
 
   # https://hub.docker.com/_/eclipse-mosquitto
   mqtt:
@@ -40,8 +43,15 @@ services:
     image: koenkk/zigbee2mqtt:2.13.0@sha256:4fb4db4d49a217bed6d0204f454ce809febc565bbe051b85c556ee2bcef73d8c
     volumes:
       - zigbee2mqtt:/app/data
+    environment:
+      ZIGBEE2MQTT_CONFIG_AVAILABILITY_ENABLED: "true"
+      ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED: "true"
+      ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_ENABLED: "true"
+      ZIGBEE2MQTT_CONFIG_FRONTEND_HOST: 0.0.0.0
+      ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: 8080
+      ZIGBEE2MQTT_CONFIG_MQTT_SERVER: mqtt://mqtt:1883
     ports:
-      - 7000:8080
+      - 8080:8080
     privileged: true
     devices:
       - /dev/ttyAMA0
@@ -79,6 +89,8 @@ services:
   # https://github.com/home-assistant-libs/python-matter-server/blob/main/docs/docker.md
   matter-server:
     image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
+    # Required for mDNS to work correctly
+    network_mode: host
     security_opt:
       # Required for Bluetooth via D-Bus
       - apparmor:unconfined
@@ -90,6 +102,8 @@ services:
     labels:
       # Required for Bluetooth via D-Bus
       io.balena.features.dbus: '1'
+    # If you adjust command line, make sure to pass the default CMD arguments too:
+    # command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
 
 volumes:
   config: {}
