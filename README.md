@@ -32,7 +32,7 @@ Once your device joins the fleet you'll need to allow some time for it to
 download the various services.
 
 When it's done you should be able to access the access the app at
-<http://homeassistant.local:8123>.
+<http://homeassistant.local>.
 
 Documentation for Home Assistant can be found at
 <https://www.home-assistant.io/docs/>.
@@ -60,7 +60,7 @@ listening on port 1883.
 #### zigbee2mqtt
 
 [Zigbee2MQTT](https://www.zigbee2mqtt.io/) supports various Zigbee adapters and
-the Web UI is on port 7000.
+the Web UI is on port 8080.
 
 #### hostname
 
@@ -70,13 +70,6 @@ This service is expected to remain in the `stopped` state after applying
 changes.
 
 <https://github.com/balenablocks/hostname>
-
-#### tailscale
-
-Add your device to your [Tailscale](https://tailscale.com/) network with this
-block!
-
-<https://github.com/klutchell/balena-tailscale>
 
 ## Contributing
 
