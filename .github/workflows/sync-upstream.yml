@@ -1,0 +1,57 @@
+name: sync-upstream
+
+# Rebase this fork onto klutchell/balena-homeassistant and force-push main.
+# Needs a SYNC_TOKEN secret: fine-grained PAT on this repo with
+# Contents + Workflows read/write (GITHUB_TOKEN cannot push workflow changes).
+
+on:
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: sync-upstream
+
+jobs:
+  rebase:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_TOKEN }}
+
+      - name: Rebase onto upstream
+        id: rebase
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "before=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          bash .github/scripts/sync-upstream.sh | tee /dev/stderr | grep '^changed=' >> "$GITHUB_OUTPUT"
+
+      - name: Push
+        if: steps.rebase.outputs.changed == 'true'
+        run: git push --force-with-lease=main:${{ steps.rebase.outputs.before }} origin HEAD:main
+
+      - name: Report failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Upstream sync failed"
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
+          body="The scheduled rebase onto klutchell/balena-homeassistant failed: $RUN_URL
+
+          Resolve locally with \`git fetch https://github.com/klutchell/balena-homeassistant main && git rebase FETCH_HEAD\`, then \`git push --force-with-lease\`."
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "$body"
+          fi
