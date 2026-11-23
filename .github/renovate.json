@@ -1,5 +1,12 @@
 {
   "extends": [
     "github>klutchell/renovate-config"
+  ],
+  "packageRules": [
+    {
+      "description": "Every merged PR deploys to the text_html/balena-homeassistant fleet, so merge updates by hand",
+      "matchPackageNames": ["*"],
+      "automerge": false
+    }
   ]
 }
