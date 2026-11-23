@@ -1,6 +1,7 @@
 name: sync-upstream
 
-# Rebase this fork onto klutchell/balena-homeassistant and force-push main.
+# Rebase this fork onto klutchell/balena-homeassistant and force-push main
+# (the push triggers deploy.yml, which builds a final balena release).
 # Needs a SYNC_TOKEN secret: fine-grained PAT on this repo with
 # Contents + Workflows read/write (GITHUB_TOKEN cannot push workflow changes).
 

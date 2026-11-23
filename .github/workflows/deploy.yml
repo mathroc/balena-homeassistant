@@ -1,0 +1,26 @@
+name: deploy
+
+# Build a final balena release for every update of main, including the
+# force-pushes made by sync-upstream (which pushes with SYNC_TOKEN, so it
+# triggers this workflow). balena.yml keeps upstream's draft releases on PRs.
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: balena-io/deploy-to-balena-action@3653c472f0bb6a9885110328b28c3a80470b3b63 # v2.3.1
+        with:
+          balena_token: ${{ secrets.BALENA_API_KEY }}
+          fleet: text_html/balena-homeassistant
